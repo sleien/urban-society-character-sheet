@@ -2,12 +2,31 @@ function loadNewSheet(argument) {
     location.reload();
 }
 
-$(document).ready(function(argument) {
+$(document).ready(async function (argument) {
 
-    //Load from local storage
+    let loadJson = "";
+    
+    // Load from local storage
     if (localStorage.getItem("savedSheet")) {
         loadJson = JSON.parse(localStorage.getItem("savedSheet"));
+    } else {
+        try {
+            const response = await fetch("sheet/savedSheet.json");
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            
+            loadJson = await response.json();
+
+            // Now you can use the loaded JSON data here
+
+        } catch (error) {
+            console.log("Fetch error:", error);
+        }
     }
+
+    console.log(loadJson);
 
     //Change the title to the character name
     if (loadJson.page1.basic_info.char_name)
@@ -161,7 +180,7 @@ $(document).ready(function(argument) {
     $('#page-1 #proficiencies #languages textarea[name="languages"]').val(loadJson.page1.proficiencies.languages);
 
     //Load Attacks
-    $.each(loadJson.page1.attacks_spells, function(index, value) {
+    $.each(loadJson.page1.attacks_spells, function (index, value) {
         $('#page-1 #attacks-spells #attacks tbody').append(`
             <tr>                    <td><input type="text" name="name" value="` + value.name + `"/></td>
                 <td><input type="text" name="stat" value="` + value.stat + `"/></td>
@@ -174,27 +193,27 @@ $(document).ready(function(argument) {
 
     //Load Charges
     $('#page-1 #charges #charge-1 input[name="charge-1"]').val(loadJson.page1.charges.charge_1.name);
-    $.each(loadJson.page1.charges.charge_1.total, function(index, value) {
+    $.each(loadJson.page1.charges.charge_1.total, function (index, value) {
         $('#page-1 #charges #charge-1 input[name="' + value + '"]').prop("checked", true);
     });
     $('#page-1 #charges #charge-2 input[name="charge-2"]').val(loadJson.page1.charges.charge_2.name);
-    $.each(loadJson.page1.charges.charge_2.total, function(index, value) {
+    $.each(loadJson.page1.charges.charge_2.total, function (index, value) {
         $('#page-1 #charges #charge-2 input[name="' + value + '"]').prop("checked", true);
     });
     $('#page-1 #charges #charge-3 input[name="charge-3"]').val(loadJson.page1.charges.charge_3.name);
-    $.each(loadJson.page1.charges.charge_3.total, function(index, value) {
+    $.each(loadJson.page1.charges.charge_3.total, function (index, value) {
         $('#page-1 #charges #charge-3 input[name="' + value + '"]').prop("checked", true);
     });
     $('#page-1 #charges #charge-4 input[name="charge-4"]').val(loadJson.page1.charges.charge_4.name);
-    $.each(loadJson.page1.charges.charge_4.total, function(index, value) {
+    $.each(loadJson.page1.charges.charge_4.total, function (index, value) {
         $('#page-1 #charges #charge-4 input[name="' + value + '"]').prop("checked", true);
     });
     $('#page-1 #charges #charge-5 input[name="charge-5"]').val(loadJson.page1.charges.charge_5.name);
-    $.each(loadJson.page1.charges.charge_5.total, function(index, value) {
+    $.each(loadJson.page1.charges.charge_5.total, function (index, value) {
         $('#page-1 #charges #charge-5 input[name="' + value + '"]').prop("checked", true);
     });
     $('#page-1 #charges #charge-6 input[name="charge-6"]').val(loadJson.page1.charges.charge_6.name);
-    $.each(loadJson.page1.charges.charge_6.total, function(index, value) {
+    $.each(loadJson.page1.charges.charge_6.total, function (index, value) {
         $('#page-1 #charges #charge-6 input[name="' + value + '"]').prop("checked", true);
     });
 
@@ -202,13 +221,13 @@ $(document).ready(function(argument) {
     $('#page-1 #features textarea[name="features"]').val(loadJson.page1.features);
 
     //Load Equipment
-    $.each(loadJson.page2.equipment.val.col_1, function(index, value) {
+    $.each(loadJson.page2.equipment.val.col_1, function (index, value) {
         var child = index + 2;
         $('#page-2 #equipment .col-1 tr:nth-child(' + child + ') input[name="name"]').val(value.name);
         $('#page-2 #equipment .col-1 tr:nth-child(' + child + ') input[name="weight"]').val(value.weight);
     });
 
-    $.each(loadJson.page2.equipment.val.col_2, function(index, value) {
+    $.each(loadJson.page2.equipment.val.col_2, function (index, value) {
         var child = index + 1;
         $('#page-2 #equipment .col-2 tr:nth-child(' + child + ') input[name="name"]').val(value.name);
         $('#page-2 #equipment .col-2 tr:nth-child(' + child + ') input[name="weight"]').val(value.weight);
@@ -266,7 +285,7 @@ $(document).ready(function(argument) {
     $('#page-3 #spell-info input[name="bonus"]').val(loadJson.page3.spell_info.bonus);
 
     //Load Spells
-    $.each(loadJson.page3.spells.cantrips.spells, function(index, value) {
+    $.each(loadJson.page3.spells.cantrips.spells, function (index, value) {
         var child = index + 1;
         $('#page-3 #spells #cantrips .spells .spell:nth-child(' + child + ') input[name="spell-name"]').val(value.spell_name);
     });
@@ -274,7 +293,7 @@ $(document).ready(function(argument) {
     $('#page-3 #spells #level-1 input[name="total-1"]').val(loadJson.page3.spells.level_1.total);
     //In changes.js
     updateSpellSlots($('#page-3 #spells #level-1 input[name="total-1"]'));
-    $.each(loadJson.page3.spells.level_1.spells, function(index, value) {
+    $.each(loadJson.page3.spells.level_1.spells, function (index, value) {
         var child = index + 1;
         $('#page-3 #spells #level-1 .spells .spell:nth-child(' + child + ') input[name="preped"]').prop("checked", value.preped);
         $('#page-3 #spells #level-1 .spells .spell:nth-child(' + child + ') input[name="spell-name"]').val(value.spell_name);
