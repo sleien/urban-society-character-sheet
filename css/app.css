@@ -183,6 +183,9 @@ textarea {
 #spell-att select {
     font-size: 1.2em;
 }
+#spell-att {
+    min-width: 100% !important;
+}
 
 #status>div {
     min-height: 191px;
@@ -553,8 +556,4 @@ td {
 .w3-flat-asbestos {
     color: #fff;
     background-color: #7f8c8d
-}
-
-#spell-att{
-    min-width: 100%;
 }
