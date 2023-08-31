@@ -494,7 +494,7 @@ function calculateTotalCurrency(argument) {
             total = total.toFixed(0);
             break;
         case 's':
-            total = total.toFixed(2);
+            total = total.toFixed(3);
             break;
     }
 
@@ -509,14 +509,14 @@ function cacluateCurrencyMod(coin, base) {
                     return 1;
                     break;
                 case 's':
-                    return 1 / 1000;
+                    return 1 / 1000000;
                     break;
             }
             break;
         case 'laks':
             switch (base) {
                 case 'c':
-                    return 1000;
+                    return 1000000;
                     break;
                 case 's':
                     return 1;
